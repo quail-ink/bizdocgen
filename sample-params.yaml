@@ -1,0 +1,29 @@
+id: "20240210-SAMPLE"
+date: 2024-02-10
+currency: "JPY"
+company_name: "春日町株式会社"
+company_addr: "Cocoro BG 404, Shinbashi 1-2-3\nTokyo, Japan, 100-1234"
+company_email: "hi@hruhimachi.com"
+tax_number: "T1234567890000"
+bill_to: "湯ちち株式会社\nShinbashi 4-2-1, Tokyo, Japan, 100-0001"
+summary:
+  period_start: 2024-01-01
+  period_end: 2024-02-29
+  title: "System Development and Design Service"
+  total_exclude_tax: 500000
+  tax_rate: 0.1
+detail_items:
+  - date: 2024-01-31
+    title: "Implementation of the System"
+    desc: "Implementing the system based on the requirements."
+    url:
+    total_exclude_tax: 0
+  - date: 2024-01-01
+    title: "System Design Draft"
+    desc: "Drafting the system design document."
+    url: https://github.com/hruhimachi/project-draft
+    total_exclude_tax: 0
+payment:
+  receive_account_bank: "三井住友銀行"
+  receive_account_branch: "本店営業部(001)"
+  receive_account_number: "12345678"
