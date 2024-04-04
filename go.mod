@@ -1,4 +1,4 @@
-module github.com/quail-ink/quail-invoice
+module github.com/quail-ink/invoice-generator
 
 go 1.22.1
 

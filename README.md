@@ -10,7 +10,7 @@ package main
 import (
   "os"
   "log"
-  "github.com/quail-ink/quail-invoice"
+  invoice "github.com/quail-ink/invoice-generator"
 )
 
 func main() {
