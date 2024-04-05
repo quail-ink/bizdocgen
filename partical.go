@@ -3,6 +3,7 @@ package invoice
 import (
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"strings"
 
@@ -16,34 +17,36 @@ import (
 	"github.com/johnfercher/maroto/v2/pkg/consts/fontstyle"
 	marotoCore "github.com/johnfercher/maroto/v2/pkg/core"
 	"github.com/johnfercher/maroto/v2/pkg/props"
-	"github.com/sirupsen/logrus"
 )
 
-func buildInvoiceHeader(params *InvoiceParams, sealfile string) ([]marotoCore.Row, error) {
+func buildInvoiceHeader(params *InvoiceParams) ([]marotoCore.Row, error) {
 	borderBottomStyle := &props.Cell{
 		BorderType:  border.Bottom,
 		BorderColor: &props.Color{Red: 200, Green: 200, Blue: 200},
 	}
-
-	fd, err := os.Open(sealfile)
-	if err != nil {
-		logrus.WithError(err).Error("failed to open seal file")
-		return nil, err
-	}
-	defer fd.Close()
-	buf, err := io.ReadAll(fd)
-	if err != nil {
-		logrus.WithError(err).Error("failed to read seal file")
-		return nil, err
-	}
-
 	leftCol := col.New(6)
-	leftCol.Add(image.NewFromBytes(buf, extension.Png, props.Rect{
-		Center:  false,
-		Percent: 20,
-		Left:    34,
-		Top:     7,
-	}))
+
+	if params.CompanySeal != "" {
+		fd, err := os.Open(params.CompanySeal)
+		if err != nil {
+			log.Printf("failed to open seal file: %v\n", err)
+			return nil, err
+		}
+		defer fd.Close()
+		buf, err := io.ReadAll(fd)
+		if err != nil {
+			log.Printf("failed to read seal file: %v\n", err)
+			return nil, err
+		}
+
+		leftCol.Add(image.NewFromBytes(buf, extension.Png, props.Rect{
+			Center:  false,
+			Percent: 20,
+			Left:    34,
+			Top:     7,
+		}))
+	}
+
 	leftCol.Add(text.New(params.CompanyName, props.Text{Size: 14, Top: 8, Align: align.Left, Style: fontstyle.Bold}))
 	lines := strings.Split(params.CompanyAddr, "\n")
 	for ix, line := range lines {
@@ -91,14 +94,18 @@ func buildInvoicePaymentRows(params *InvoiceParams) []marotoCore.Row {
 			text.New(params.Payment.ReceiveAccountBank, props.Text{Size: 10, Top: 4, Align: align.Right}),
 		),
 	))
-	rows = append(rows, row.New(8).Add(
-		col.New(2).Add(
-			text.New("Bank Branch", props.Text{Size: 10, Top: 0, Align: align.Left}),
-		),
-		col.New(10).Add(
-			text.New(params.Payment.ReceiveAccountBranch, props.Text{Size: 10, Top: 0, Align: align.Right}),
-		),
-	))
+
+	if params.Payment.ReceiveAccountBranch != "" {
+		rows = append(rows, row.New(8).Add(
+			col.New(2).Add(
+				text.New("Bank Branch", props.Text{Size: 10, Top: 0, Align: align.Left}),
+			),
+			col.New(10).Add(
+				text.New(params.Payment.ReceiveAccountBranch, props.Text{Size: 10, Top: 0, Align: align.Right}),
+			),
+		))
+	}
+
 	rows = append(rows, row.New(8).Add(
 		col.New(2).Add(
 			text.New("Bank Account", props.Text{Size: 10, Top: 0, Align: align.Left}),
@@ -107,6 +114,28 @@ func buildInvoicePaymentRows(params *InvoiceParams) []marotoCore.Row {
 			text.New(params.Payment.ReceiveAccountNumber, props.Text{Size: 10, Top: 0, Align: align.Right}),
 		),
 	))
+
+	if params.Payment.ReceiveAccountSwift != "" {
+		rows = append(rows, row.New(8).Add(
+			col.New(2).Add(
+				text.New("SWIFT", props.Text{Size: 10, Top: 0, Align: align.Left}),
+			),
+			col.New(10).Add(
+				text.New(params.Payment.ReceiveAccountSwift, props.Text{Size: 10, Top: 0, Align: align.Right}),
+			),
+		))
+	}
+
+	if params.Payment.ReceiveAccountRouting != "" {
+		rows = append(rows, row.New(8).Add(
+			col.New(2).Add(
+				text.New("Routing Number", props.Text{Size: 10, Top: 0, Align: align.Left}),
+			),
+			col.New(10).Add(
+				text.New(params.Payment.ReceiveAccountRouting, props.Text{Size: 10, Top: 0, Align: align.Right}),
+			),
+		))
+	}
 	return rows
 }
 

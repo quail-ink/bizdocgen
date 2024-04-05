@@ -27,9 +27,11 @@ type (
 	}
 
 	InvoicePayment struct {
-		ReceiveAccountBank   string `yaml:"receive_account_bank"`
-		ReceiveAccountBranch string `yaml:"receive_account_branch"`
-		ReceiveAccountNumber string `yaml:"receive_account_number"`
+		ReceiveAccountBank    string `yaml:"receive_account_bank"`
+		ReceiveAccountBranch  string `yaml:"receive_account_branch"`
+		ReceiveAccountNumber  string `yaml:"receive_account_number"`
+		ReceiveAccountRouting string `yaml:"receive_account_routing"`
+		ReceiveAccountSwift   string `yaml:"receive_account_swift"`
 	}
 
 	InvoiceParams struct {
@@ -40,6 +42,7 @@ type (
 		CompanyName  string    `yaml:"company_name"`
 		CompanyAddr  string    `yaml:"company_addr"`
 		CompanyEmail string    `yaml:"company_email"`
+		CompanySeal  string    `yaml:"company_seal"`
 
 		BillTo string `yaml:"bill_to"`
 

@@ -16,14 +16,13 @@ import (
 func main() {
 	builder, err := invoice.NewBuilder(
 		Config{
-			SealImage:      "./sample-seal.png",
 			FontName:       "noto-sans-cjk",
 			FontNormal:     "./fonts/NotoSansCJK-JP/NotoSansCJKjp-Regular.ttf",
 			FontItalic:     "./fonts/NotoSansCJK-JP/NotoSansCJKjp-Italic.ttf",
 			FontBold:       "./fonts/NotoSansCJK-JP/NotoSansCJKjp-Bold.ttf",
 			FontBoldItalic: "./fonts/NotoSansCJK-JP/NotoSansCJKjp-BoldItalic.ttf",
 		},
-		"./sample-params.yaml")
+		"./sample-params-2.yaml")
 	if err != nil {
 		log.Fatal("failed to create builder")
 		return

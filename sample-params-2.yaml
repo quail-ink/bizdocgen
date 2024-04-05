@@ -4,6 +4,7 @@ currency: "JPY"
 company_name: "春日町株式会社"
 company_addr: "Cocoro BG 404, Shinbashi 1-2-3\nTokyo, Japan, 100-1234"
 company_email: "hi@hruhimachi.com"
+company_seal: "sample-seal.png"
 tax_number: "T1234567890000"
 bill_to: "湯ちち株式会社\nShinbashi 4-2-1, Tokyo, Japan, 100-0001"
 summary:

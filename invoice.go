@@ -1,6 +1,7 @@
 package invoice
 
 import (
+	"log"
 	"strings"
 
 	"github.com/johnfercher/maroto/v2/pkg/components/col"
@@ -9,12 +10,10 @@ import (
 	"github.com/johnfercher/maroto/v2/pkg/components/text"
 	"github.com/johnfercher/maroto/v2/pkg/consts/fontstyle"
 	"github.com/johnfercher/maroto/v2/pkg/props"
-	"github.com/sirupsen/logrus"
 )
 
 type (
 	Config struct {
-		SealImage      string
 		FontName       string
 		FontNormal     string
 		FontItalic     string
@@ -41,15 +40,15 @@ func NewBuilder(cfg Config, paramFile string) (*Builder, error) {
 }
 
 func (b *Builder) GenerateInvoice() ([]byte, error) {
-	headers, err := buildInvoiceHeader(b.params, b.cfg.SealImage)
+	headers, err := buildInvoiceHeader(b.params)
 	if err != nil {
-		logrus.WithError(err).Error("failed to build invoice header")
+		log.Printf("failed to build invoice header: %v\n", err)
 		return nil, err
 	}
 
 	m, err := b.CreateMetricsDecorator(headers)
 	if err != nil {
-		logrus.WithError(err).Error("failed to register header")
+		log.Printf("failed to register header: %v\n", err)
 		return nil, err
 	}
 
@@ -85,7 +84,7 @@ func (b *Builder) GenerateInvoice() ([]byte, error) {
 
 	document, err := m.Generate()
 	if err != nil {
-		logrus.WithError(err).Error("failed to generate invoice")
+		log.Printf("failed to generate invoice: %v\n", err)
 		return nil, err
 	}
 
