@@ -192,6 +192,15 @@ func buildInvoiceDetailsRows(params *InvoiceParams) []marotoCore.Row {
 					text.New(item.URL, props.Text{Size: 8, Top: 0, Align: align.Left, Hyperlink: &url, Color: colorLink}),
 				),
 			))
+		} else if len(item.URLs) > 0 {
+			for _, url := range item.URLs {
+				rows = append(rows, row.New(8).Add(
+					col.New(2),
+					col.New(10).Add(
+						text.New(url, props.Text{Size: 8, Top: 0, Align: align.Left, Hyperlink: &url, Color: colorLink}),
+					),
+				))
+			}
 		}
 	}
 	return rows

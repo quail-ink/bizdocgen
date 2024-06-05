@@ -15,6 +15,7 @@ type (
 		Title           string          `yaml:"title"`
 		Desc            string          `yaml:"desc"`
 		URL             string          `yaml:"url"`
+		URLs            []string        `yaml:"urls"`
 		TotalExcludeTax decimal.Decimal `yaml:"total_exclude_tax"`
 	}
 
