@@ -41,7 +41,6 @@ func New() *I18nBundle {
 }
 
 func (i *I18nBundle) Localizer(lang string) *i18n.Localizer {
-	fmt.Printf("lang: %v\n", lang)
 	if l, ok := i.localizers[lang]; ok {
 		return l
 	}
