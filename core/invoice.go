@@ -41,11 +41,12 @@ type (
 		Date         time.Time `yaml:"date" time_format:"2006/01/02"`
 		Currency     string    `yaml:"currency"`
 		CompanyName  string    `yaml:"company_name"`
-		CompanyAddr  string    `yaml:"company_addr"`
+		CompanyAddr  string    `yaml:"company_address"`
 		CompanyEmail string    `yaml:"company_email"`
 		CompanySeal  string    `yaml:"company_seal"`
 
-		BillTo string `yaml:"bill_to"`
+		BillToCompany string `yaml:"bill_to_company"`
+		BillToAddress string `yaml:"bill_to_address"`
 
 		// Summary
 		Summary InvoiceSummary `yaml:"summary"`

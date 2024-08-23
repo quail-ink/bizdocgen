@@ -81,11 +81,8 @@ func (b *Builder) BuildInvoiceBillTo() []marotoCore.Row {
 	tBillTo := b.i18nBundle.MusT(b.cfg.Lang, "InvoiceBillTo", nil)
 
 	billTo := col.New(8)
-	lines := strings.Split(b.iParams.BillTo, "\n")
-	for ix, line := range lines {
-		line = strings.TrimSpace(line)
-		billTo.Add(text.New(line, props.Text{Size: 10, Top: float64(6 * ix)}))
-	}
+	billTo.Add(text.New(b.iParams.BillToCompany, props.Text{Size: 10, Top: float64(0), Style: fontstyle.Bold}))
+	billTo.Add(text.New(b.iParams.BillToAddress, props.Text{Size: 10, Top: float64(6)}))
 
 	return []marotoCore.Row{
 		text.NewRow(10, tBillTo, props.Text{Size: 12, Top: 0, Style: fontstyle.Bold}),
