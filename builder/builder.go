@@ -2,6 +2,7 @@ package builder
 
 import (
 	"log"
+	"log/slog"
 	"strings"
 
 	"github.com/johnfercher/maroto/v2/pkg/components/col"
@@ -9,9 +10,11 @@ import (
 	"github.com/johnfercher/maroto/v2/pkg/components/row"
 	"github.com/johnfercher/maroto/v2/pkg/components/text"
 	"github.com/johnfercher/maroto/v2/pkg/consts/fontstyle"
+	marotoCore "github.com/johnfercher/maroto/v2/pkg/core"
 	"github.com/johnfercher/maroto/v2/pkg/props"
 	"github.com/quail-ink/bizdocgen/core"
 	"github.com/quail-ink/bizdocgen/invoice"
+	"github.com/quail-ink/bizdocgen/paymentstatement"
 )
 
 type (
@@ -24,25 +27,44 @@ type (
 	}
 
 	Builder struct {
-		cfg    Config
-		params *core.InvoiceParams
+		cfg      Config
+		iParams  *core.InvoiceParams
+		psParams *core.PaymentStatementParams
 	}
 )
 
-func NewBuilder(cfg Config, paramFile string) (*Builder, error) {
-	params := &core.InvoiceParams{}
-	if err := params.Load(paramFile); err != nil {
-		return nil, err
-	}
-
+func NewInvoiceBuilder(cfg Config, params *core.InvoiceParams) (*Builder, error) {
 	return &Builder{
-		cfg:    cfg,
-		params: params,
+		cfg:     cfg,
+		iParams: params,
 	}, nil
 }
 
+func NewInvoiceBuilderFromFile(cfg Config, filename string) (*Builder, error) {
+	params := &core.InvoiceParams{}
+	if err := params.Load(filename); err != nil {
+		return nil, err
+	}
+	return NewInvoiceBuilder(cfg, params)
+}
+
+func NewPaymentStatementBuilder(cfg Config, params *core.PaymentStatementParams) (*Builder, error) {
+	return &Builder{
+		cfg:      cfg,
+		psParams: params,
+	}, nil
+}
+
+func NewPaymentStatementBuilderFromFile(cfg Config, filename string) (*Builder, error) {
+	params := &core.PaymentStatementParams{}
+	if err := params.Load(filename); err != nil {
+		return nil, err
+	}
+	return NewPaymentStatementBuilder(cfg, params)
+}
+
 func (b *Builder) GenerateInvoice() ([]byte, error) {
-	headers, err := invoice.BuildInvoiceHeader(b.params)
+	headers, err := invoice.BuildInvoiceHeader(b.iParams)
 	if err != nil {
 		log.Printf("failed to build invoice header: %v\n", err)
 		return nil, err
@@ -61,7 +83,7 @@ func (b *Builder) GenerateInvoice() ([]byte, error) {
 
 	// bill to
 	billTo := col.New(12)
-	lines := strings.Split(b.params.BillTo, "\n")
+	lines := strings.Split(b.iParams.BillTo, "\n")
 	for ix, line := range lines {
 		line = strings.TrimSpace(line)
 		billTo.Add(text.New(line, props.Text{Size: 10, Top: float64(6*ix + 8)}))
@@ -70,23 +92,59 @@ func (b *Builder) GenerateInvoice() ([]byte, error) {
 	receiveRow := row.New(30).Add(billTo)
 	newPage.Add(receiveRow)
 
-	summary := invoice.BuildInvoiceSummaryRows(b.params)
+	summary := invoice.BuildInvoiceSummaryRows(b.iParams)
 
 	newPage.Add(summary...)
 
-	details := invoice.BuildInvoiceDetailsRows(b.params)
+	details := invoice.BuildInvoiceDetailsRows(b.iParams)
 
 	newPage.Add(details...)
 
-	payment := invoice.BuildInvoicePaymentRows(b.params)
+	payment := invoice.BuildInvoicePaymentRows(b.iParams)
 
 	newPage.Add(payment...)
 
 	m.AddPages(newPage)
 
-	document, err := m.Generate()
+	return b.getBytesFromMaroto(m)
+}
+
+func (b *Builder) GeneratePaymentStatement() ([]byte, error) {
+	headers, err := paymentstatement.BuildHeader(b.psParams)
 	if err != nil {
-		log.Printf("failed to generate invoice: %v\n", err)
+		log.Printf("failed to build header: %v\n", err)
+		return nil, err
+	}
+
+	m, err := b.CreateMetricsDecorator(headers)
+	if err != nil {
+		log.Printf("failed to register header: %v\n", err)
+		return nil, err
+	}
+
+	newPage := page.New()
+
+	payer := paymentstatement.BuildPayer(b.psParams)
+	newPage.Add(payer...)
+
+	payee := paymentstatement.BuildPayee(b.psParams)
+	newPage.Add(payee...)
+
+	summary := paymentstatement.BuildSummaryRows(b.psParams)
+	newPage.Add(summary...)
+
+	details := paymentstatement.BuildDetailsRows(b.psParams)
+	newPage.Add(details...)
+
+	m.AddPages(newPage)
+
+	return b.getBytesFromMaroto(m)
+}
+
+func (b *Builder) getBytesFromMaroto(maroto marotoCore.Maroto) ([]byte, error) {
+	document, err := maroto.Generate()
+	if err != nil {
+		slog.Error("failed to generate document from maroto", "error", err)
 		return nil, err
 	}
 

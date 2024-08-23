@@ -58,14 +58,14 @@ type (
 	}
 )
 
-func (pa *InvoiceParams) Load(filename string) error {
+func (params *InvoiceParams) Load(filename string) error {
 	data, err := os.ReadFile(filename)
 	if err != nil {
 		logrus.WithError(err).Fatalf("failed to read YAML file")
 		return err
 	}
 
-	if err := yaml.Unmarshal(data, pa); err != nil {
+	if err := yaml.Unmarshal(data, params); err != nil {
 		logrus.WithError(err).Fatalf("failed to unmarshal YAML")
 		return err
 	}

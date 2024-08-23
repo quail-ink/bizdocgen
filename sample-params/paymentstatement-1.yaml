@@ -1,0 +1,25 @@
+id: "20240315-SAMPLE"
+date: 2024-03-15
+period_start: 2024-02-01
+period_end: 2024-02-29
+currency: "USD"
+company_seal: "../sample-seal.png"
+payee:
+  name: "ABC Inc"
+  addr: "Cocoro BG 404, Shinbashi 1-2-3\nTokyo, Japan, 100-1234"
+  contact: "hi@hruhimachi.com"
+  tax_number: "T1234567890000"
+payer:
+  name: "XYZ LLC"
+  addr: "Shinbashi 4-2-1, Tokyo, Japan, 100-0001"
+  contact: "abc@xyz"
+  tax_number: "T9876543210000"
+detail_items:
+  - title: "Premium Subscription"
+    desc: "Monthly subscription fee for the premium plan."
+    amount: 8000
+    withholding_tax_rate: "0.2042"
+  - title: "Advertising Revenue"
+    desc: "Revenue from the advertising campaign."
+    amount: 2000
+    withholding_tax_rate: "0.2042"
