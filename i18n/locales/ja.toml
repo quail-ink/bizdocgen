@@ -1,0 +1,92 @@
+[InvoiceTaxID]
+other = "税務番号"
+
+[InvoiceIssueDate]
+other = "請求書発行日"
+
+[InvoicePeriod]
+other = "請求期間"
+
+[InvoiceBillTo]
+other = "請求先"
+
+[InvoiceSummary]
+other = "概要"
+
+[InvoiceSummaryAmount]
+other = "金額"
+
+[InvoiceSummaryJct]
+other = "消費税 (JCT)"
+
+[InvoiceSummaryTotalWithTax]
+other = "合計 (税込)"
+
+[InvoiceDetails]
+other = "明細"
+
+[InvoicePayment]
+other = "支払方法"
+
+[InvoicePaymentBankName]
+other = "銀行名"
+
+[InvoicePaymentBankBranch]
+other = "支店名"
+
+[InvoicePaymentBankAccount]
+other = "口座番号"
+
+
+
+[PaymentStatementTitle]
+other = "報酬、料金、契約金及び賞金の支払調書"
+
+[PaymentStatementIssueDate]
+other = "支払調書発行日"
+
+[PaymentStatementPeriod]
+other = "期間"
+
+[PaymentStatementSummary]
+other = "概要"
+
+[PaymentStatementSummaryAmount]
+other = "金額"
+
+[PaymentStatementSummaryRevenue]
+other = "売上"
+
+[PaymentStatementSummaryNetAmount]
+other = "支払金額 (税抜)"
+
+[PaymentStatementWithholdingTax]
+other = "源泉所得税"
+
+[PaymentStatementDetails]
+other = "細目"
+
+[PaymentStatementDetailsAmount]
+other = "支払金額"
+
+[PaymentStatementDetailsTax]
+other = "源泉徵收税額"
+
+[PaymentStatementPayer]
+other = "支払者"
+
+[PaymentStatementPayee]
+other = "支払を受ける者"
+
+[PaymentStatementUserName]
+other = "氏名"
+
+[PaymentStatementUserAddress]
+other = "住所"
+
+[PaymentStatementUserTaxID]
+other = "個人番号又は法人番号"
+
+[PaymentStatementUserContact]
+other = "連絡先"
+

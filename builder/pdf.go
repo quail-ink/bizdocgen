@@ -47,7 +47,7 @@ func (b *Builder) CreateMetricsDecorator(head []marotoCore.Row) (marotoCore.Maro
 	}
 
 	bu := config.NewBuilder()
-	bu = bu.WithPageNumber("Page {current} of {total}", props.Bottom)
+	// bu = bu.WithPageNumber("Page {current} of {total}", props.Bottom)
 	if useCustomFonts {
 		bu = bu.WithCustomFonts(customFonts)
 		bu = bu.WithDefaultFont(&props.Font{Family: b.cfg.FontName})

@@ -1,0 +1,92 @@
+[InvoiceTaxID]
+other = "Tax ID"
+
+[InvoiceIssueDate]
+other = "Invoice Issue Date"
+
+[InvoicePeriod]
+other = "Invoice Period"
+
+[InvoiceBillTo]
+other = "Bill To"
+
+[InvoiceSummary]
+other = "Summary"
+
+[InvoiceSummaryAmount]
+other = "Amount"
+
+[InvoiceSummaryJct]
+other = "JCT"
+
+[InvoiceSummaryTotalWithTax]
+other = "Total (including tax)"
+
+[InvoiceDetails]
+other = "Details"
+
+[InvoicePayment]
+other = "Payment Instructions"
+
+[InvoicePaymentBankName]
+other = "Bank Name"
+
+[InvoicePaymentBankBranch]
+other = "Bank Branch"
+
+[InvoicePaymentBankAccount]
+other = "Bank Account"
+
+
+
+[PaymentStatementTitle]
+other = "報酬、料金、契約金及び賞金の支払調書"
+
+[PaymentStatementIssueDate]
+other = "支払調書発行日"
+
+[PaymentStatementPeriod]
+other = "期間"
+
+[PaymentStatementSummary]
+other = "Summary"
+
+[PaymentStatementSummaryAmount]
+other = "Amount"
+
+[PaymentStatementSummaryRevenue]
+other = "Revenue"
+
+[PaymentStatementSummaryNetAmount]
+other = "Payment Amount (excluding tax)"
+
+[PaymentStatementWithholdingTax]
+other = "Withholding Tax"
+
+[PaymentStatementDetails]
+other = "Details"
+
+[PaymentStatementDetailsAmount]
+other = "Payment Amount"
+
+[PaymentStatementDetailsTax]
+other = "Withholding Tax"
+
+[PaymentStatementPayer]
+other = "Payment From"
+
+[PaymentStatementPayee]
+other = "Payment To"
+
+[PaymentStatementUserName]
+other = "Name"
+
+[PaymentStatementUserAddress]
+other = "Address"
+
+[PaymentStatementUserTaxID]
+other = "Tax ID"
+
+[PaymentStatementUserContact]
+other = "Contact"
+

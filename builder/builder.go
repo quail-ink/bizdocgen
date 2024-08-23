@@ -13,8 +13,8 @@ import (
 	marotoCore "github.com/johnfercher/maroto/v2/pkg/core"
 	"github.com/johnfercher/maroto/v2/pkg/props"
 	"github.com/quail-ink/bizdocgen/core"
+	"github.com/quail-ink/bizdocgen/i18n"
 	"github.com/quail-ink/bizdocgen/invoice"
-	"github.com/quail-ink/bizdocgen/paymentstatement"
 )
 
 type (
@@ -24,19 +24,33 @@ type (
 		FontItalic     string
 		FontBold       string
 		FontBoldItalic string
+
+		Lang string
 	}
 
 	Builder struct {
-		cfg      Config
-		iParams  *core.InvoiceParams
-		psParams *core.PaymentStatementParams
+		cfg        Config
+		i18nBundle *i18n.I18nBundle
+		iParams    *core.InvoiceParams
+		psParams   *core.PaymentStatementParams
+		Round      int32
 	}
 )
 
 func NewInvoiceBuilder(cfg Config, params *core.InvoiceParams) (*Builder, error) {
+	i18nBundle := i18n.New()
+	if cfg.Lang == "" {
+		cfg.Lang = "en"
+	}
+	round := 2
+	if params.Currency == "JPY" || params.Currency == "円" {
+		round = 0
+	}
 	return &Builder{
-		cfg:     cfg,
-		iParams: params,
+		cfg:        cfg,
+		i18nBundle: i18nBundle,
+		iParams:    params,
+		Round:      int32(round),
 	}, nil
 }
 
@@ -49,9 +63,19 @@ func NewInvoiceBuilderFromFile(cfg Config, filename string) (*Builder, error) {
 }
 
 func NewPaymentStatementBuilder(cfg Config, params *core.PaymentStatementParams) (*Builder, error) {
+	i18nBundle := i18n.New()
+	if cfg.Lang == "" {
+		cfg.Lang = "en"
+	}
+	round := 2
+	if params.Currency == "JPY" || params.Currency == "円" {
+		round = 0
+	}
 	return &Builder{
-		cfg:      cfg,
-		psParams: params,
+		cfg:        cfg,
+		i18nBundle: i18nBundle,
+		psParams:   params,
+		Round:      int32(round),
 	}, nil
 }
 
@@ -110,7 +134,7 @@ func (b *Builder) GenerateInvoice() ([]byte, error) {
 }
 
 func (b *Builder) GeneratePaymentStatement() ([]byte, error) {
-	headers, err := paymentstatement.BuildHeader(b.psParams)
+	headers, err := b.BuildPsHeader()
 	if err != nil {
 		log.Printf("failed to build header: %v\n", err)
 		return nil, err
@@ -124,16 +148,16 @@ func (b *Builder) GeneratePaymentStatement() ([]byte, error) {
 
 	newPage := page.New()
 
-	payer := paymentstatement.BuildPayer(b.psParams)
+	payer := b.BuildPsPayer()
 	newPage.Add(payer...)
 
-	payee := paymentstatement.BuildPayee(b.psParams)
+	payee := b.BuildPsPayee()
 	newPage.Add(payee...)
 
-	summary := paymentstatement.BuildSummaryRows(b.psParams)
+	summary := b.BuildPsSummaryRows()
 	newPage.Add(summary...)
 
-	details := paymentstatement.BuildDetailsRows(b.psParams)
+	details := b.BuildPsDetailsRows()
 	newPage.Add(details...)
 
 	m.AddPages(newPage)

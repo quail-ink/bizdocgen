@@ -35,6 +35,7 @@ func TestGenerateInvoiceWithConfig(t *testing.T) {
 			FontItalic:     "./fonts/NotoSansCJK-JP/NotoSansCJKjp-Italic.ttf",
 			FontBold:       "./fonts/NotoSansCJK-JP/NotoSansCJKjp-Bold.ttf",
 			FontBoldItalic: "./fonts/NotoSansCJK-JP/NotoSansCJKjp-BoldItalic.ttf",
+			Lang:           "ja",
 		},
 		"../sample-params/invoice-2.yaml")
 	if err != nil {
@@ -56,7 +57,14 @@ func TestGenerateInvoiceWithConfig(t *testing.T) {
 }
 
 func TestGeneratePaymentstatement(t *testing.T) {
-	builder, err := NewPaymentStatementBuilderFromFile(Config{}, "../sample-params/paymentstatement-1.yaml")
+	builder, err := NewPaymentStatementBuilderFromFile(Config{
+		FontName:       "noto-sans-cjk",
+		FontNormal:     "../fonts/NotoSansCJK-JP/NotoSansCJKjp-Regular.ttf",
+		FontItalic:     "../fonts/NotoSansCJK-JP/NotoSansCJKjp-Italic.ttf",
+		FontBold:       "../fonts/NotoSansCJK-JP/NotoSansCJKjp-Bold.ttf",
+		FontBoldItalic: "../fonts/NotoSansCJK-JP/NotoSansCJKjp-BoldItalic.ttf",
+		Lang:           "ja",
+	}, "../sample-params/paymentstatement-1.yaml")
 	if err != nil {
 		t.Fatal("failed to create builder")
 		return

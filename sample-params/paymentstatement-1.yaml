@@ -2,16 +2,16 @@ id: "20240315-SAMPLE"
 date: 2024-03-15
 period_start: 2024-02-01
 period_end: 2024-02-29
-currency: "USD"
+currency: "円"
 company_seal: "../sample-seal.png"
 payee:
-  name: "ABC Inc"
-  addr: "Cocoro BG 404, Shinbashi 1-2-3\nTokyo, Japan, 100-1234"
+  name: "春地町株式会社"
+  addr: "100-1234　東京都港区新橋１−２−３　Cocoro BG 404"
   contact: "hi@hruhimachi.com"
   tax_number: "T1234567890000"
 payer:
-  name: "XYZ LLC"
-  addr: "Shinbashi 4-2-1, Tokyo, Japan, 100-0001"
+  name: "株式会社物個々"
+  addr: "100-0001　東京都千代田区千代田１−１"
   contact: "abc@xyz"
   tax_number: "T9876543210000"
 detail_items:
