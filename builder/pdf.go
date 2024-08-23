@@ -1,4 +1,4 @@
-package invoice
+package builder
 
 import (
 	marotoCore "github.com/johnfercher/maroto/v2/pkg/core"

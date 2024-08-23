@@ -1,9 +1,8 @@
 # Invoice Generator
 
-A simple invoice generator created by [Quail](https://quail.ink). 
+A simple invoice generator created by [Quail](https://quail.ink).
 
 ![](https://static.quail.ink/media/qz5uzv5q.webp)
-
 
 ## Usage
 
@@ -13,11 +12,11 @@ package main
 import (
   "os"
   "log"
-  invoice "github.com/quail-ink/invoice-generator"
+  "github.com/quail-ink/bizdocgen"
 )
 
 func main() {
-	builder, err := invoice.NewBuilder(Config{},"./sample-params-1.yaml")
+	builder, err := bizdocgen.NewBuilder(Config{}, "./sample-params-1.yaml")
 	if err != nil {
 		log.Panic("failed to create builder")
 	}
@@ -39,7 +38,7 @@ func main() {
 The builder can be configured with custom fonts, to display CJK characters properly. Here is an example of how to configure the builder with [NotoSansCJK-JP](https://github.com/minoryorg/Noto-Sans-CJK-JP/tree/master/fonts)
 
 ```go
-builder, _ := invoice.NewBuilder(
+builder, _ := bizdocgen.NewBuilder(
 	Config{
 		FontName:       "noto-sans-cjk",
 		FontNormal:     "./fonts/NotoSansCJK-JP/NotoSansCJKjp-Regular.ttf",

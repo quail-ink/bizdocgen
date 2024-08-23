@@ -17,9 +17,10 @@ import (
 	"github.com/johnfercher/maroto/v2/pkg/consts/fontstyle"
 	marotoCore "github.com/johnfercher/maroto/v2/pkg/core"
 	"github.com/johnfercher/maroto/v2/pkg/props"
+	"github.com/quail-ink/bizdocgen/core"
 )
 
-func buildInvoiceHeader(params *InvoiceParams) ([]marotoCore.Row, error) {
+func BuildInvoiceHeader(params *core.InvoiceParams) ([]marotoCore.Row, error) {
 	borderBottomStyle := &props.Cell{
 		BorderType:  border.Bottom,
 		BorderColor: &props.Color{Red: 200, Green: 200, Blue: 200},
@@ -73,7 +74,7 @@ func buildInvoiceHeader(params *InvoiceParams) ([]marotoCore.Row, error) {
 	return rows, nil
 }
 
-func buildInvoicePaymentRows(params *InvoiceParams) []marotoCore.Row {
+func BuildInvoicePaymentRows(params *core.InvoiceParams) []marotoCore.Row {
 	borderBottomStyle := &props.Cell{
 		BorderType:  border.Bottom,
 		BorderColor: &props.Color{Red: 200, Green: 200, Blue: 200},
@@ -139,7 +140,7 @@ func buildInvoicePaymentRows(params *InvoiceParams) []marotoCore.Row {
 	return rows
 }
 
-func buildInvoiceDetailsRows(params *InvoiceParams) []marotoCore.Row {
+func BuildInvoiceDetailsRows(params *core.InvoiceParams) []marotoCore.Row {
 	colorSecondary := &props.Color{
 		Red:   100,
 		Green: 100,
@@ -206,7 +207,7 @@ func buildInvoiceDetailsRows(params *InvoiceParams) []marotoCore.Row {
 	return rows
 }
 
-func buildInvoiceSummaryRows(params *InvoiceParams) []marotoCore.Row {
+func BuildInvoiceSummaryRows(params *core.InvoiceParams) []marotoCore.Row {
 	borderBottomStyle := &props.Cell{
 		BorderType:  border.Bottom,
 		BorderColor: &props.Color{Red: 200, Green: 200, Blue: 200},

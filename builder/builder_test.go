@@ -1,4 +1,4 @@
-package invoice
+package builder
 
 import (
 	"os"

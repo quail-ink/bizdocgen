@@ -1,4 +1,4 @@
-package invoice
+package builder
 
 import (
 	"log"
@@ -10,6 +10,8 @@ import (
 	"github.com/johnfercher/maroto/v2/pkg/components/text"
 	"github.com/johnfercher/maroto/v2/pkg/consts/fontstyle"
 	"github.com/johnfercher/maroto/v2/pkg/props"
+	"github.com/quail-ink/bizdocgen/core"
+	"github.com/quail-ink/bizdocgen/invoice"
 )
 
 type (
@@ -23,12 +25,12 @@ type (
 
 	Builder struct {
 		cfg    Config
-		params *InvoiceParams
+		params *core.InvoiceParams
 	}
 )
 
 func NewBuilder(cfg Config, paramFile string) (*Builder, error) {
-	params := &InvoiceParams{}
+	params := &core.InvoiceParams{}
 	if err := params.Load(paramFile); err != nil {
 		return nil, err
 	}
@@ -40,7 +42,7 @@ func NewBuilder(cfg Config, paramFile string) (*Builder, error) {
 }
 
 func (b *Builder) GenerateInvoice() ([]byte, error) {
-	headers, err := buildInvoiceHeader(b.params)
+	headers, err := invoice.BuildInvoiceHeader(b.params)
 	if err != nil {
 		log.Printf("failed to build invoice header: %v\n", err)
 		return nil, err
@@ -68,15 +70,15 @@ func (b *Builder) GenerateInvoice() ([]byte, error) {
 	receiveRow := row.New(30).Add(billTo)
 	newPage.Add(receiveRow)
 
-	summary := buildInvoiceSummaryRows(b.params)
+	summary := invoice.BuildInvoiceSummaryRows(b.params)
 
 	newPage.Add(summary...)
 
-	details := buildInvoiceDetailsRows(b.params)
+	details := invoice.BuildInvoiceDetailsRows(b.params)
 
 	newPage.Add(details...)
 
-	payment := buildInvoicePaymentRows(b.params)
+	payment := invoice.BuildInvoicePaymentRows(b.params)
 
 	newPage.Add(payment...)
 
