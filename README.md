@@ -1,6 +1,6 @@
-# Invoice Generator
+# bizdocgen
 
-A simple invoice generator created by [Quail](https://quail.ink).
+A biz doc generator created by [Quail](https://quail.ink).
 
 ![](https://static.quail.ink/media/qz5uzv5q.webp)
 

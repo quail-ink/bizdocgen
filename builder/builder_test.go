@@ -8,7 +8,7 @@ import (
 // TestHelloName calls greetings.Hello with a name, checking
 // for a valid return value.
 func TestGenerateInvoice(t *testing.T) {
-	builder, err := NewBuilder(Config{}, "./sample-params-1.yaml")
+	builder, err := NewBuilder(Config{}, "../sample-params-1.yaml")
 	if err != nil {
 		t.Fatal("failed to create builder")
 		return
