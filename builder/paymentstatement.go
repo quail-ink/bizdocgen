@@ -204,10 +204,10 @@ func (b *Builder) BuildPsDetailsRows() []marotoCore.Row {
 				text.New(item.Title, props.Text{Size: 10, Top: paddingTop, Align: align.Left}),
 			),
 			col.New(4).Add(
-				text.New(fmt.Sprintf("%s %s", netAmount, b.psParams.Currency), props.Text{Size: 10, Top: paddingTop, Align: align.Right}),
+				text.New(fmt.Sprintf("%s %s", netAmount.Round(b.Round), b.psParams.Currency), props.Text{Size: 10, Top: paddingTop, Align: align.Right}),
 			),
 			col.New(4).Add(
-				text.New(fmt.Sprintf("%s %s", tax, b.psParams.Currency), props.Text{Size: 10, Top: paddingTop, Align: align.Right}),
+				text.New(fmt.Sprintf("%s %s", tax.Round(b.Round), b.psParams.Currency), props.Text{Size: 10, Top: paddingTop, Align: align.Right}),
 			),
 		))
 

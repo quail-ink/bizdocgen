@@ -15,11 +15,11 @@ payer:
   contact: "abc@xyz"
   tax_number: "T9876543210000"
 detail_items:
-  - title: "Premium Subscription"
+  - title: "プレミアムサブスクリプション"
     desc: "Monthly subscription fee for the premium plan."
     amount: 8000
     withholding_tax_rate: "0.2042"
-  - title: "Advertising Revenue"
+  - title: "広告収入"
     desc: "Revenue from the advertising campaign."
     amount: 2000
     withholding_tax_rate: "0.2042"
