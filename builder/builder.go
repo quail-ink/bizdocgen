@@ -3,18 +3,11 @@ package builder
 import (
 	"log"
 	"log/slog"
-	"strings"
 
-	"github.com/johnfercher/maroto/v2/pkg/components/col"
 	"github.com/johnfercher/maroto/v2/pkg/components/page"
-	"github.com/johnfercher/maroto/v2/pkg/components/row"
-	"github.com/johnfercher/maroto/v2/pkg/components/text"
-	"github.com/johnfercher/maroto/v2/pkg/consts/fontstyle"
 	marotoCore "github.com/johnfercher/maroto/v2/pkg/core"
-	"github.com/johnfercher/maroto/v2/pkg/props"
 	"github.com/quail-ink/bizdocgen/core"
 	"github.com/quail-ink/bizdocgen/i18n"
-	"github.com/quail-ink/bizdocgen/invoice"
 )
 
 type (
@@ -88,7 +81,7 @@ func NewPaymentStatementBuilderFromFile(cfg Config, filename string) (*Builder, 
 }
 
 func (b *Builder) GenerateInvoice() ([]byte, error) {
-	headers, err := invoice.BuildInvoiceHeader(b.iParams)
+	headers, err := b.BuildInvoiceHeader()
 	if err != nil {
 		log.Printf("failed to build invoice header: %v\n", err)
 		return nil, err
@@ -101,30 +94,19 @@ func (b *Builder) GenerateInvoice() ([]byte, error) {
 	}
 
 	newPage := page.New()
-	newPage.Add(
-		text.NewRow(14, "BILL TO", props.Text{Size: 12, Top: 20, Style: fontstyle.Bold}),
-	)
 
-	// bill to
-	billTo := col.New(12)
-	lines := strings.Split(b.iParams.BillTo, "\n")
-	for ix, line := range lines {
-		line = strings.TrimSpace(line)
-		billTo.Add(text.New(line, props.Text{Size: 10, Top: float64(6*ix + 8)}))
-	}
+	receiveRows := b.BuildInvoiceBillTo()
+	newPage.Add(receiveRows...)
 
-	receiveRow := row.New(30).Add(billTo)
-	newPage.Add(receiveRow)
-
-	summary := invoice.BuildInvoiceSummaryRows(b.iParams)
+	summary := b.BuildInvoiceSummaryRows()
 
 	newPage.Add(summary...)
 
-	details := invoice.BuildInvoiceDetailsRows(b.iParams)
+	details := b.BuildInvoiceDetailsRows()
 
 	newPage.Add(details...)
 
-	payment := invoice.BuildInvoicePaymentRows(b.iParams)
+	payment := b.BuildInvoicePaymentRows()
 
 	newPage.Add(payment...)
 
