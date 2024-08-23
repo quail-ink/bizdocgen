@@ -20,7 +20,7 @@ func TestGenerateInvoice(t *testing.T) {
 		return
 	}
 
-	filename := "sample-invoice.pdf"
+	filename := "../sample-invoice.pdf"
 	if err := os.WriteFile(filename, buf, 0666); err != nil {
 		t.Fatal("failed to write to file")
 		return
