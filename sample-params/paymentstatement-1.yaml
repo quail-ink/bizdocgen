@@ -4,6 +4,8 @@ period_start: 2024-02-01
 period_end: 2024-02-29
 currency: "円"
 company_seal: "../sample-seal.png"
+payment_tx_id: "abc123"
+payment_channel: "銀行振込"
 payee:
   name: "春地町株式会社"
   addr: "100-1234　東京都港区新橋１−２−３　Cocoro BG 404"

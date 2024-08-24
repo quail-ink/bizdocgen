@@ -39,6 +39,9 @@ type (
 		PeriodStart time.Time `yaml:"period_start" time_format:"2006/01/02"`
 		PeriodEnd   time.Time `yaml:"period_end" time_format:"2006/01/02"`
 
+		PaymentChannel string `yaml:"payment_channel"`
+		PaymentTxID    string `yaml:"payment_tx_id"`
+
 		Payer       PaymentStatementPayer        `yaml:"payer"`
 		Payee       PaymentStatementPayee        `yaml:"payee"`
 		DetailItems []PaymentStatementDetailItem `yaml:"detail_items"`
@@ -59,4 +62,3 @@ func (params *PaymentStatementParams) Load(filename string) error {
 
 	return nil
 }
-

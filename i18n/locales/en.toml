@@ -48,6 +48,15 @@ other = "支払調書発行日"
 [PaymentStatementPeriod]
 other = "期間"
 
+[PaymentStatementChannelTitle]
+other = "Payment"
+
+[PaymentStatementChannel]
+other = "Payment Channel"
+
+[PaymentStatementChannelTxID]
+other = "Payment Tx ID"
+
 [PaymentStatementSummary]
 other = "Summary"
 

@@ -10,6 +10,15 @@ other = "請求期間"
 [InvoiceBillTo]
 other = "請求先"
 
+[PaymentStatementChannelTitle]
+other = "支払"
+
+[PaymentStatementChannel]
+other = "支払チャネル"
+
+[PaymentStatementChannelTxID]
+other = "支払トランザクションID"
+
 [InvoiceSummary]
 other = "概要"
 

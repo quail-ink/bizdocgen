@@ -136,6 +136,9 @@ func (b *Builder) GeneratePaymentStatement() ([]byte, error) {
 	payee := b.BuildPsPayee()
 	newPage.Add(payee...)
 
+	channel := b.BuildPsChannelRows()
+	newPage.Add(channel...)
+
 	summary := b.BuildPsSummaryRows()
 	newPage.Add(summary...)
 

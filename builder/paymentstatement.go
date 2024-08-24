@@ -84,19 +84,19 @@ func (b *Builder) BuildPsPayer() []marotoCore.Row {
 
 		row.New(6).Add(
 			text.NewCol(4, tName, props.Text{Size: 10, Top: 2, Align: align.Left}),
-			text.NewCol(8, b.psParams.Payer.Name, props.Text{Size: 10, Top: 2, Align: align.Right, Style: fontstyle.Bold}),
+			text.NewCol(8, b.psParams.Payer.Name, props.Text{Size: 10, Top: 2, Align: align.Right}),
 		),
 		row.New(6).Add(
 			text.NewCol(4, tAddress, props.Text{Size: 10, Top: 2, Align: align.Left}),
-			text.NewCol(8, b.psParams.Payer.Address, props.Text{Size: 10, Top: 2, Align: align.Right, Style: fontstyle.Bold}),
+			text.NewCol(8, b.psParams.Payer.Address, props.Text{Size: 10, Top: 2, Align: align.Right}),
 		),
 		row.New(6).Add(
 			text.NewCol(4, tTaxID, props.Text{Size: 10, Top: 2, Align: align.Left}),
-			text.NewCol(8, b.psParams.Payer.TaxNumber, props.Text{Size: 10, Top: 2, Align: align.Right, Style: fontstyle.Bold}),
+			text.NewCol(8, b.psParams.Payer.TaxNumber, props.Text{Size: 10, Top: 2, Align: align.Right}),
 		),
 		row.New(6).Add(
 			text.NewCol(4, tContact, props.Text{Size: 10, Top: 2, Align: align.Left}),
-			text.NewCol(8, b.psParams.Payer.Contact, props.Text{Size: 10, Top: 2, Align: align.Right, Style: fontstyle.Bold}),
+			text.NewCol(8, b.psParams.Payer.Contact, props.Text{Size: 10, Top: 2, Align: align.Right}),
 		),
 	}
 }
@@ -110,24 +110,46 @@ func (b *Builder) BuildPsPayee() []marotoCore.Row {
 
 	return []marotoCore.Row{
 		text.NewRow(14, tPayee, props.Text{Size: 12, Top: 8, Style: fontstyle.Bold}),
-
 		row.New(6).Add(
-			text.NewCol(4, tName, props.Text{Size: 10, Top: 2, Align: align.Left}),
-			text.NewCol(8, b.psParams.Payee.Name, props.Text{Size: 10, Top: 2, Align: align.Right, Style: fontstyle.Bold}),
+			text.NewCol(3, tName, props.Text{Size: 10, Top: 2, Align: align.Left}),
+			text.NewCol(9, b.psParams.Payee.Name, props.Text{Size: 10, Top: 2, Align: align.Right}),
 		),
 		row.New(6).Add(
-			text.NewCol(4, tAddress, props.Text{Size: 10, Top: 2, Align: align.Left}),
-			text.NewCol(8, b.psParams.Payee.Address, props.Text{Size: 10, Top: 2, Align: align.Right, Style: fontstyle.Bold}),
+			text.NewCol(3, tAddress, props.Text{Size: 10, Top: 2, Align: align.Left}),
+			text.NewCol(9, b.psParams.Payee.Address, props.Text{Size: 10, Top: 2, Align: align.Right}),
 		),
 		row.New(6).Add(
 			text.NewCol(4, tTaxID, props.Text{Size: 10, Top: 2, Align: align.Left}),
-			text.NewCol(8, b.psParams.Payee.TaxNumber, props.Text{Size: 10, Top: 2, Align: align.Right, Style: fontstyle.Bold}),
+			text.NewCol(8, b.psParams.Payee.TaxNumber, props.Text{Size: 10, Top: 2, Align: align.Right}),
 		),
 		row.New(6).Add(
 			text.NewCol(4, tContact, props.Text{Size: 10, Top: 2, Align: align.Left}),
-			text.NewCol(8, b.psParams.Payee.Contact, props.Text{Size: 10, Top: 2, Align: align.Right, Style: fontstyle.Bold}),
+			text.NewCol(8, b.psParams.Payee.Contact, props.Text{Size: 10, Top: 2, Align: align.Right}),
 		),
 		row.New(4),
+	}
+}
+
+func (b *Builder) BuildPsChannelRows() []marotoCore.Row {
+	tChannelTitle := b.i18nBundle.MusT(b.cfg.Lang, "PaymentStatementChannelTitle", nil)
+	tChannel := b.i18nBundle.MusT(b.cfg.Lang, "PaymentStatementChannel", nil)
+	tTxID := b.i18nBundle.MusT(b.cfg.Lang, "PaymentStatementChannelTxID", nil)
+	borderBottomStyle := &props.Cell{
+		BorderType:  border.Bottom,
+		BorderColor: &props.Color{Red: 200, Green: 200, Blue: 200},
+	}
+	return []marotoCore.Row{
+		row.New(16).WithStyle(borderBottomStyle).Add(
+			text.NewCol(8, tChannelTitle, props.Text{Size: 12, Top: 8, Align: align.Left, Style: fontstyle.Bold}),
+		),
+		row.New(10).Add(
+			text.NewCol(6, tChannel, props.Text{Size: 10, Top: 4, Align: align.Left}),
+			text.NewCol(6, b.psParams.PaymentChannel, props.Text{Size: 10, Top: 4, Align: align.Right}),
+		),
+		row.New(12).Add(
+			text.NewCol(6, tTxID, props.Text{Size: 10, Top: 4, Align: align.Left}),
+			text.NewCol(6, b.psParams.PaymentTxID, props.Text{Size: 10, Top: 4, Align: align.Right}),
+		),
 	}
 }
 
@@ -165,7 +187,7 @@ func (b *Builder) BuildPsSummaryRows() []marotoCore.Row {
 			text.NewCol(6, tWithholdingTax, props.Text{Size: 10, Top: 0, Align: align.Left}),
 			text.NewCol(6, fmt.Sprintf("-%s %s", totalTax.Round(b.Round), b.psParams.Currency), props.Text{Size: 10, Top: 0, Align: align.Right}),
 		),
-		row.New(20).Add(
+		row.New(16).Add(
 			text.NewCol(6, tNetAmount, props.Text{Size: 12, Top: 4, Align: align.Left, Style: fontstyle.Bold}),
 			text.NewCol(6, fmt.Sprintf("%s %s", totalWithoutTax.Round(b.Round), b.psParams.Currency), props.Text{Size: 12, Top: 4, Align: align.Right, Style: fontstyle.Bold}),
 		),
