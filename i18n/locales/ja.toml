@@ -70,7 +70,7 @@ other = "売上"
 other = "支払金額 (税抜)"
 
 [PaymentStatementWithholdingTax]
-other = "源泉所得税"
+other = "源泉徴収税"
 
 [PaymentStatementDetails]
 other = "細目"
