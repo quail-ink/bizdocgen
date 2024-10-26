@@ -1,3 +1,6 @@
+[InvoiceID]
+other = "Invoice ID"
+
 [InvoiceTaxID]
 other = "Tax ID"
 
@@ -16,8 +19,8 @@ other = "Summary"
 [InvoiceSummaryAmount]
 other = "Amount"
 
-[InvoiceSummaryJct]
-other = "JCT"
+[InvoiceSummaryVAT]
+other = "VAT"
 
 [InvoiceSummaryTotalWithTax]
 other = "Total (including tax)"
@@ -28,14 +31,26 @@ other = "Details"
 [InvoicePayment]
 other = "Payment Instructions"
 
+[InvoicePaymentMethod]
+other = "Method"
+
+[InvoicePaymentID]
+other = "Payment ID"
+
 [InvoicePaymentBankName]
 other = "Bank Name"
 
 [InvoicePaymentBankBranch]
 other = "Bank Branch"
 
+[InvoicePaymentBankDepositType]
+other = "Deposit Type"
+
 [InvoicePaymentBankAccount]
 other = "Bank Account"
+
+[InvoicePaymentBankAccountName]
+other = "Bank Account Name"
 
 
 

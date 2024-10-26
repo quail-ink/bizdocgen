@@ -106,9 +106,10 @@ func (b *Builder) GenerateInvoice() ([]byte, error) {
 
 	newPage.Add(details...)
 
-	payment := b.BuildInvoicePaymentRows()
-
-	newPage.Add(payment...)
+	if !b.iParams.Payment.Disabled {
+		payment := b.BuildInvoicePaymentRows()
+		newPage.Add(payment...)
+	}
 
 	m.AddPages(newPage)
 

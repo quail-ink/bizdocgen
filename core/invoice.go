@@ -24,13 +24,19 @@ type (
 		PeriodEnd       time.Time       `yaml:"period_end" time_format:"2006/01/02"`
 		Title           string          `yaml:"title"`
 		TotalExcludeTax decimal.Decimal `yaml:"total_exclude_tax"`
+		TotalIncludeTax decimal.Decimal `yaml:"total_include_tax"`
 		TaxRate         decimal.Decimal `yaml:"tax_rate"`
 	}
 
 	InvoicePayment struct {
+		Disabled              bool   `yaml:"show"`
+		PaymentID             string `yaml:"payment_id"`
+		Method                string `yaml:"method"`
 		ReceiveAccountBank    string `yaml:"receive_account_bank"`
 		ReceiveAccountBranch  string `yaml:"receive_account_branch"`
+		ReceiveDepositType    string `yaml:"receive_deposit_type"`
 		ReceiveAccountNumber  string `yaml:"receive_account_number"`
+		ReceiveAccountName    string `yaml:"receive_account_name"`
 		ReceiveAccountRouting string `yaml:"receive_account_routing"`
 		ReceiveAccountSwift   string `yaml:"receive_account_swift"`
 	}

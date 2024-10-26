@@ -1,3 +1,6 @@
+[InvoiceID]
+other = "請求書番号"
+
 [InvoiceTaxID]
 other = "税務番号"
 
@@ -25,7 +28,7 @@ other = "概要"
 [InvoiceSummaryAmount]
 other = "金額"
 
-[InvoiceSummaryJct]
+[InvoiceSummaryVAT]
 other = "消費税 (JCT)"
 
 [InvoiceSummaryTotalWithTax]
@@ -37,15 +40,26 @@ other = "明細"
 [InvoicePayment]
 other = "支払方法"
 
+[InvoicePaymentMethod]
+other = "方法"
+
+[InvoicePaymentID]
+other = "支払ID"
+
 [InvoicePaymentBankName]
 other = "銀行名"
 
 [InvoicePaymentBankBranch]
 other = "支店名"
 
+[InvoicePaymentBankDepositType]
+other = "預金種別"
+
 [InvoicePaymentBankAccount]
 other = "口座番号"
 
+[InvoicePaymentBankAccountName]
+other = "口座名義"
 
 
 [PaymentStatementTitle]

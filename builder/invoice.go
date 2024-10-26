@@ -17,9 +17,11 @@ import (
 	"github.com/johnfercher/maroto/v2/pkg/consts/fontstyle"
 	marotoCore "github.com/johnfercher/maroto/v2/pkg/core"
 	"github.com/johnfercher/maroto/v2/pkg/props"
+	"github.com/shopspring/decimal"
 )
 
 func (b *Builder) BuildInvoiceHeader() ([]marotoCore.Row, error) {
+	tInvoiceID := b.i18nBundle.MusT(b.cfg.Lang, "InvoiceID", nil)
 	tTaxID := b.i18nBundle.MusT(b.cfg.Lang, "InvoiceTaxID", nil)
 	tIssueDate := b.i18nBundle.MusT(b.cfg.Lang, "InvoiceIssueDate", nil)
 	tPeriod := b.i18nBundle.MusT(b.cfg.Lang, "InvoicePeriod", nil)
@@ -58,15 +60,16 @@ func (b *Builder) BuildInvoiceHeader() ([]marotoCore.Row, error) {
 	}
 	leftCol.Add(text.New(b.iParams.CompanyEmail, props.Text{Size: 10, Top: float64(6*(len(lines)) + 16), Align: align.Left}))
 
-	rs := row.New(40).WithStyle(borderBottomStyle).Add(
+	rs := row.New(46).WithStyle(borderBottomStyle).Add(
 		leftCol,
 		col.New(6).Add(
-			text.New(fmt.Sprintf("%s: %s", tTaxID, b.iParams.TaxNumber), props.Text{Size: 10, Top: 16, Align: align.Right}),
-			text.New(fmt.Sprintf("%s: %s", tIssueDate, b.iParams.Date.Format("2006/01/02")), props.Text{Size: 10, Top: 22, Align: align.Right}),
+			text.New(fmt.Sprintf("%s: %s", tInvoiceID, b.iParams.ID), props.Text{Size: 10, Top: 16, Align: align.Right}),
+			text.New(fmt.Sprintf("%s: %s", tTaxID, b.iParams.TaxNumber), props.Text{Size: 10, Top: 22, Align: align.Right}),
+			text.New(fmt.Sprintf("%s: %s", tIssueDate, b.iParams.Date.Format("2006/01/02")), props.Text{Size: 10, Top: 28, Align: align.Right}),
 			text.New(fmt.Sprintf("%s: %s - %s", tPeriod,
 				b.iParams.Summary.PeriodStart.Format("2006/01/02"),
 				b.iParams.Summary.PeriodEnd.Format("2006/01/02"),
-			), props.Text{Size: 10, Top: 28, Align: align.Right}),
+			), props.Text{Size: 10, Top: 34, Align: align.Right}),
 		),
 	)
 
@@ -86,15 +89,19 @@ func (b *Builder) BuildInvoiceBillTo() []marotoCore.Row {
 
 	return []marotoCore.Row{
 		text.NewRow(10, tBillTo, props.Text{Size: 12, Top: 0, Style: fontstyle.Bold}),
-		row.New(16).Add(billTo),
+		row.New(12).Add(billTo),
 	}
 }
 
 func (b *Builder) BuildInvoicePaymentRows() []marotoCore.Row {
 	tPayment := b.i18nBundle.MusT(b.cfg.Lang, "InvoicePayment", nil)
+	tMethod := b.i18nBundle.MusT(b.cfg.Lang, "InvoicePaymentMethod", nil)
+	tPaymentID := b.i18nBundle.MusT(b.cfg.Lang, "InvoicePaymentID", nil)
 	tBankName := b.i18nBundle.MusT(b.cfg.Lang, "InvoicePaymentBankName", nil)
 	tBankBranch := b.i18nBundle.MusT(b.cfg.Lang, "InvoicePaymentBankBranch", nil)
+	tBankDepositType := b.i18nBundle.MusT(b.cfg.Lang, "InvoicePaymentBankDepositType", nil)
 	tBankAccount := b.i18nBundle.MusT(b.cfg.Lang, "InvoicePaymentBankAccount", nil)
+	tBankAccountName := b.i18nBundle.MusT(b.cfg.Lang, "InvoicePaymentBankAccountName", nil)
 
 	borderBottomStyle := &props.Cell{
 		BorderType:  border.Bottom,
@@ -108,14 +115,38 @@ func (b *Builder) BuildInvoicePaymentRows() []marotoCore.Row {
 		),
 	}
 
-	rows = append(rows, row.New(12).Add(
-		col.New(2).Add(
-			text.New(tBankName, props.Text{Size: 10, Top: 4, Align: align.Left}),
-		),
-		col.New(10).Add(
-			text.New(b.iParams.Payment.ReceiveAccountBank, props.Text{Size: 10, Top: 4, Align: align.Right}),
-		),
-	))
+	if b.iParams.Payment.Method != "" {
+		rows = append(rows, row.New(12).Add(
+			col.New(2).Add(
+				text.New(tMethod, props.Text{Size: 10, Top: 4, Align: align.Left}),
+			),
+			col.New(10).Add(
+				text.New(b.iParams.Payment.Method, props.Text{Size: 10, Top: 4, Align: align.Right}),
+			),
+		))
+	}
+
+	if b.iParams.Payment.PaymentID != "" {
+		rows = append(rows, row.New(12).Add(
+			col.New(2).Add(
+				text.New(tPaymentID, props.Text{Size: 10, Top: 4, Align: align.Left}),
+			),
+			col.New(10).Add(
+				text.New(b.iParams.Payment.PaymentID, props.Text{Size: 10, Top: 4, Align: align.Right}),
+			),
+		))
+	}
+
+	if b.iParams.Payment.ReceiveAccountBank != "" {
+		rows = append(rows, row.New(12).Add(
+			col.New(2).Add(
+				text.New(tBankName, props.Text{Size: 10, Top: 4, Align: align.Left}),
+			),
+			col.New(10).Add(
+				text.New(b.iParams.Payment.ReceiveAccountBank, props.Text{Size: 10, Top: 4, Align: align.Right}),
+			),
+		))
+	}
 
 	if b.iParams.Payment.ReceiveAccountBranch != "" {
 		rows = append(rows, row.New(8).Add(
@@ -128,14 +159,38 @@ func (b *Builder) BuildInvoicePaymentRows() []marotoCore.Row {
 		))
 	}
 
-	rows = append(rows, row.New(8).Add(
-		col.New(2).Add(
-			text.New(tBankAccount, props.Text{Size: 10, Top: 0, Align: align.Left}),
-		),
-		col.New(10).Add(
-			text.New(b.iParams.Payment.ReceiveAccountNumber, props.Text{Size: 10, Top: 0, Align: align.Right}),
-		),
-	))
+	if b.iParams.Payment.ReceiveAccountNumber != "" {
+		rows = append(rows, row.New(8).Add(
+			col.New(2).Add(
+				text.New(tBankAccount, props.Text{Size: 10, Top: 0, Align: align.Left}),
+			),
+			col.New(10).Add(
+				text.New(b.iParams.Payment.ReceiveAccountNumber, props.Text{Size: 10, Top: 0, Align: align.Right}),
+			),
+		))
+	}
+
+	if b.iParams.Payment.ReceiveDepositType != "" {
+		rows = append(rows, row.New(8).Add(
+			col.New(2).Add(
+				text.New(tBankDepositType, props.Text{Size: 10, Top: 0, Align: align.Left}),
+			),
+			col.New(10).Add(
+				text.New(b.iParams.Payment.ReceiveDepositType, props.Text{Size: 10, Top: 0, Align: align.Right}),
+			),
+		))
+	}
+
+	if b.iParams.Payment.ReceiveAccountName != "" {
+		rows = append(rows, row.New(8).Add(
+			col.New(2).Add(
+				text.New(tBankAccountName, props.Text{Size: 10, Top: 0, Align: align.Left}),
+			),
+			col.New(10).Add(
+				text.New(b.iParams.Payment.ReceiveAccountName, props.Text{Size: 10, Top: 0, Align: align.Right}),
+			),
+		))
+	}
 
 	if b.iParams.Payment.ReceiveAccountSwift != "" {
 		rows = append(rows, row.New(8).Add(
@@ -202,12 +257,14 @@ func (b *Builder) BuildInvoiceDetailsRows() []marotoCore.Row {
 				text.New(item.Title, props.Text{Size: 10, Top: paddingTop, Align: align.Left}),
 			),
 		))
-		rows = append(rows, row.New(8).Add(
-			col.New(2),
-			col.New(10).Add(
-				text.New(item.Desc, props.Text{Size: 8, Top: 0, Align: align.Left, Color: colorSecondary}),
-			),
-		))
+		if item.Desc != "" {
+			rows = append(rows, row.New(8).Add(
+				col.New(2),
+				col.New(10).Add(
+					text.New(item.Desc, props.Text{Size: 8, Top: 0, Align: align.Left, Color: colorSecondary}),
+				),
+			))
+		}
 		if item.URL != "" {
 			url := item.URL
 			rows = append(rows, row.New(8).Add(
@@ -233,7 +290,7 @@ func (b *Builder) BuildInvoiceDetailsRows() []marotoCore.Row {
 func (b *Builder) BuildInvoiceSummaryRows() []marotoCore.Row {
 	tSummary := b.i18nBundle.MusT(b.cfg.Lang, "InvoiceSummary", nil)
 	tAmount := b.i18nBundle.MusT(b.cfg.Lang, "InvoiceSummaryAmount", nil)
-	tJct := b.i18nBundle.MusT(b.cfg.Lang, "InvoiceSummaryJct", nil)
+	tVAT := b.i18nBundle.MusT(b.cfg.Lang, "InvoiceSummaryVAT", nil)
 	tTotal := b.i18nBundle.MusT(b.cfg.Lang, "InvoiceSummaryTotalWithTax", nil)
 
 	borderBottomStyle := &props.Cell{
@@ -241,9 +298,18 @@ func (b *Builder) BuildInvoiceSummaryRows() []marotoCore.Row {
 		BorderColor: &props.Color{Red: 200, Green: 200, Blue: 200},
 	}
 
-	subtotal := b.iParams.Summary.TotalExcludeTax
-	tax := subtotal.Mul(b.iParams.Summary.TaxRate).RoundDown(2)
-	total := subtotal.Add(tax).RoundDown(2)
+	var total, tax, subtotal decimal.Decimal
+	if b.iParams.Summary.TotalExcludeTax.IsPositive() {
+		// tax excluded?
+		subtotal = b.iParams.Summary.TotalExcludeTax
+		tax = subtotal.Mul(b.iParams.Summary.TaxRate).RoundDown(2)
+		total = subtotal.Add(tax).RoundDown(2)
+	} else {
+		// tax included?
+		total = b.iParams.Summary.TotalIncludeTax
+		subtotal = total.Div(decimal.NewFromFloat(1).Add(b.iParams.Summary.TaxRate)).RoundDown(2)
+		tax = total.Sub(subtotal).RoundDown(2)
+	}
 
 	return []marotoCore.Row{
 		row.New(16).WithStyle(borderBottomStyle).Add(
@@ -255,7 +321,7 @@ func (b *Builder) BuildInvoiceSummaryRows() []marotoCore.Row {
 			text.NewCol(4, fmt.Sprintf("%s %s", subtotal.RoundDown(2), b.iParams.Currency), props.Text{Size: 10, Top: 4, Align: align.Right}),
 		),
 		row.New(10).WithStyle(borderBottomStyle).Add(
-			text.NewCol(6, tJct, props.Text{Size: 10, Top: 0, Align: align.Left}),
+			text.NewCol(6, tVAT, props.Text{Size: 10, Top: 0, Align: align.Left}),
 			text.NewCol(6, fmt.Sprintf("%s %s", tax, b.iParams.Currency), props.Text{Size: 10, Top: 0, Align: align.Right}),
 		),
 		row.New(20).Add(
