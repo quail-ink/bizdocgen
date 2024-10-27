@@ -6,6 +6,7 @@ import (
 
 	"github.com/johnfercher/maroto/v2/pkg/components/page"
 	marotoCore "github.com/johnfercher/maroto/v2/pkg/core"
+	"github.com/johnfercher/maroto/v2/pkg/props"
 	"github.com/quail-ink/bizdocgen/core"
 	"github.com/quail-ink/bizdocgen/i18n"
 )
@@ -22,11 +23,13 @@ type (
 	}
 
 	Builder struct {
-		cfg        Config
-		i18nBundle *i18n.I18nBundle
-		iParams    *core.InvoiceParams
-		psParams   *core.PaymentStatementParams
-		Round      int32
+		cfg              Config
+		i18nBundle       *i18n.I18nBundle
+		iParams          *core.InvoiceParams
+		psParams         *core.PaymentStatementParams
+		Round            int32
+		fgColor          *props.Color
+		fgSecondaryColor *props.Color
 	}
 )
 
@@ -40,10 +43,12 @@ func NewInvoiceBuilder(cfg Config, params *core.InvoiceParams) (*Builder, error)
 		round = 0
 	}
 	return &Builder{
-		cfg:        cfg,
-		i18nBundle: i18nBundle,
-		iParams:    params,
-		Round:      int32(round),
+		cfg:              cfg,
+		i18nBundle:       i18nBundle,
+		iParams:          params,
+		Round:            int32(round),
+		fgColor:          &props.Color{Red: 50, Green: 50, Blue: 93},
+		fgSecondaryColor: &props.Color{Red: 80, Green: 80, Blue: 123},
 	}, nil
 }
 
