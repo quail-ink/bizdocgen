@@ -245,21 +245,54 @@ func (b *Builder) BuildInvoiceDetailsRows() []marotoCore.Row {
 			paddingTop = float64(4)
 			rowHeight = float64(10)
 		}
-		rows = append(rows, row.New(rowHeight).Add(
+		r := row.New(rowHeight)
+		r.Add(
 			col.New(2).Add(
 				text.New(item.Date.Format("2006/01/02"), props.Text{Size: 9, Top: paddingTop, Align: align.Left, Color: b.fgColor}),
 			),
-			col.New(10).Add(
+			col.New(6).Add(
 				text.New(item.Title, props.Text{Size: 9, Top: paddingTop, Align: align.Left, Color: b.fgColor}),
 			),
-		))
+		)
+		if item.TotalExcludeTax.IsPositive() || item.TotalIncludeTax.IsPositive() {
+			if item.TotalIncludeTax.IsPositive() {
+				r.Add(
+					col.New(4).Add(
+						text.New(fmt.Sprintf("%s %s", item.TotalIncludeTax.RoundDown(2), b.iParams.Currency), props.Text{Size: 9, Top: paddingTop, Align: align.Right, Color: b.fgColor}),
+					),
+				)
+			} else {
+				r.Add(
+					col.New(4).Add(
+						text.New(fmt.Sprintf("%s %s", item.TotalExcludeTax.RoundDown(2), b.iParams.Currency), props.Text{Size: 9, Top: paddingTop, Align: align.Right, Color: b.fgColor}),
+					),
+				)
+			}
+		}
+		rows = append(rows, r)
+
 		if item.Desc != "" {
-			rows = append(rows, row.New(6).Add(
+			r := row.New(6)
+			r.Add(
 				col.New(2),
-				col.New(10).Add(
-					text.New(item.Desc, props.Text{Size: 8, Top: 0, Align: align.Left, Color: b.fgSecondaryColor}),
-				),
-			))
+			)
+			if item.TotalExcludeTax.IsPositive() && item.Tax.IsPositive() {
+				r.Add(
+					col.New(6).Add(
+						text.New(item.Desc, props.Text{Size: 8, Top: 0, Align: align.Left, Color: b.fgSecondaryColor}),
+					),
+					col.New(4).Add(
+						text.New(fmt.Sprintf("VAT: %s %s", item.Tax.RoundDown(2), b.iParams.Currency), props.Text{Size: 8, Top: 0, Align: align.Right, Color: b.fgSecondaryColor}),
+					),
+				)
+			} else {
+				r.Add(
+					col.New(10).Add(
+						text.New(item.Desc, props.Text{Size: 8, Top: 0, Align: align.Left, Color: b.fgSecondaryColor}),
+					),
+				)
+			}
+			rows = append(rows, r)
 		}
 		if item.URL != "" {
 			url := item.URL
@@ -299,13 +332,17 @@ func (b *Builder) BuildInvoiceSummaryRows() []marotoCore.Row {
 	if b.iParams.Summary.TotalExcludeTax.IsPositive() {
 		// tax excluded?
 		subtotal = b.iParams.Summary.TotalExcludeTax
-		tax = subtotal.Mul(b.iParams.Summary.TaxRate).RoundDown(2)
-		total = subtotal.Add(tax).RoundDown(2)
+		if b.iParams.Summary.Tax.IsPositive() {
+			tax = b.iParams.Summary.Tax.Round(2)
+		} else if b.iParams.Summary.TaxRate.IsPositive() {
+			tax = subtotal.Mul(b.iParams.Summary.TaxRate).Round(2)
+		}
+		total = subtotal.Add(tax).Round(2)
 	} else {
 		// tax included?
 		total = b.iParams.Summary.TotalIncludeTax
-		subtotal = total.Div(decimal.NewFromFloat(1).Add(b.iParams.Summary.TaxRate)).RoundDown(2)
-		tax = total.Sub(subtotal).RoundDown(2)
+		subtotal = total.Div(decimal.NewFromFloat(1).Add(b.iParams.Summary.TaxRate)).Round(2)
+		tax = total.Sub(subtotal).Round(2)
 	}
 
 	return []marotoCore.Row{

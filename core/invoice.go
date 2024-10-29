@@ -17,6 +17,8 @@ type (
 		URL             string          `yaml:"url"`
 		URLs            []string        `yaml:"urls"`
 		TotalExcludeTax decimal.Decimal `yaml:"total_exclude_tax"`
+		TotalIncludeTax decimal.Decimal `yaml:"total_include_tax"`
+		Tax             decimal.Decimal `yaml:"tax"`
 	}
 
 	InvoiceSummary struct {
@@ -25,6 +27,7 @@ type (
 		Title           string          `yaml:"title"`
 		TotalExcludeTax decimal.Decimal `yaml:"total_exclude_tax"`
 		TotalIncludeTax decimal.Decimal `yaml:"total_include_tax"`
+		Tax             decimal.Decimal `yaml:"tax"`
 		TaxRate         decimal.Decimal `yaml:"tax_rate"`
 	}
 
